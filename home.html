@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student management system</title>
+    <style>
+        .navbar{
+            width: 100%;
+            height: 60px;
+            border: 1px solid black;
+         background-color: navy;
+         text-align: center;
+         margin-bottom: 10px;
+         border-radius: 8px;
+        }
+        #student_counter{
+           font-size: 20px;
+           font-weight: bolder;
+           color: white;
+           
+           
+        }
+button{
+    margin: auto;
+    margin-left: 40%;
+}
+       a:link{
+    color:green;
+            text-decoration: none;
+            font-style: italic;
+            /* background-color: white; */
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <p id="student_counter"></p>
+    </div>
+    <button>
+        <a href="dashboard.html">Dashboard</a>
+    </button>
+    <form onsubmit="myFun()" action="" id="form">
+        <input type="text" id="name" placeholder="Student name">
+        <input type="text" id="course" placeholder="course">
+        <input type="number" id="unit" placeholder="Unit">
+        <input type="text" id="image" placeholder="Enter image URL">
+        <input type="text" id="batch" placeholder="Batch name">
+        <input type="submit" >
+    </form>
+    
+</body>
+</html>
+<script>
+
+function StudentInfo(name,course,image,unit,batch){
+            this.name=name;
+            this.course=course;
+            this.image=image;
+            this.unit=unit;
+            this.batch= "ft-web-"+batch;
+            
+
+    }
+    function myFun(){
+        event.preventDefault();
+     //   console.log("IN");
+      
+        var name= document.getElementById("name").value
+        var course= document.getElementById("course").value
+        var unit= document.getElementById("unit").value
+        var image= document.getElementById("image").value
+        var batch= document.getElementById("batch").value
+              // *************const fun*********
+   if(name=="" || course=="" || unit=="" || image=="" || batch==""){
+       alert("please enter all the details correctly")
+   }else{
+    var student_arr=JSON.parse(localStorage.getItem("students")) || [];
+    var student_data_obj= new StudentInfo(name,course,image,unit,batch)
+     student_arr.push(student_data_obj)
+     localStorage.setItem("students",JSON.stringify(student_arr))
+     //console.log(student_arr);
+        // form.name.value=null;
+        // form.course.value=null;
+        // form.unit.value=null;
+        // form.image.value=null;
+        // form.batch.value=null;
+        window.location.reload()
+   }
+
+
+    }
+    
+
+    function calculate(){
+        let data= JSON.parse(localStorage.getItem("students")) || [];
+        let data_obj={};
+        data.forEach(function(elem){
+            if(data_obj[elem.batch]==undefined){
+                data_obj[elem.batch]=1
+            }else{
+                data_obj[elem.batch]=data_obj[elem.batch]+1
+            }
+          
+
+        });
+          //console.log(data_obj);
+        // var nav=document.getElementsByClassName("navbar")
+         var counter=document.getElementById("student_counter")
+         for(var keys in data_obj){
+            counter.append(" "+keys+" "+":"+" "+data_obj[keys]+" "+"|")
+
+         }
+         
+     }
+     calculate()
+
+</script>

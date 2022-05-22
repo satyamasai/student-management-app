@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student dashboard</title>
+    <style>
+          .navbar{
+            width: 100%;
+            height: 60px;
+            border: 1px solid black;
+         background-color: navy;
+         text-align: center;
+         margin-bottom: 10px;
+         border-radius: 8px;
+        }
+        #student_counter{
+           font-size: 20px;
+           font-weight: bolder;
+           color: white;
+           
+           
+        }
+        .dashboard>div{
+            display: flex;
+            width: 100%;
+            height: 60px;
+            margin: 5px;
+            border: 1px solid navy;
+            justify-content: space-between;
+
+            
+        }
+    img{
+        width: 8%;
+        height: 100%;
+    }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <p id="student_counter"></p>
+    </div>
+    <div class="dashboard">
+
+    </div>
+</body>
+</html>
+<script>
+    var student_data= JSON.parse(localStorage.getItem("students")) || [];
+    var dashboard=document.querySelector(".dashboard")
+    student_data.forEach(function(element,index){
+        //console.log("checked");
+        var div1=document.createElement("div")
+    var img=document.createElement("img")
+    img.src=element.image
+    var h2=document.createElement("h2")
+    h2.innerText=element.name
+    var course=document.createElement("p")
+    course.innerText="Course : "+element.course
+    var unit=document.createElement("p")
+    unit.innerText=element.unit
+  
+    var batch=document.createElement("h4")
+    batch.innerText=element.batch
+    var dltbutton=document.createElement("button")
+    dltbutton.innerText="Remove"
+    dltbutton.addEventListener("click",function(){
+        dltFun(index);
+    })
+    // ***************delete data*
+    div1.append(img,h2,course,unit,batch,dltbutton)
+    dashboard.append(div1)
+
+        
+    });
+    // ------------calculator--------
+    
+    function calculate(){
+        let data= JSON.parse(localStorage.getItem("students")) || [];
+        let data_obj={};
+        data.forEach(function(elem){
+            if(data_obj[elem.batch]==undefined){
+                data_obj[elem.batch]=1
+            }else{
+                data_obj[elem.batch]=data_obj[elem.batch]+1
+            }
+          
+
+        });
+          //console.log(data_obj);
+        // var nav=document.getElementsByClassName("navbar")
+         var counter=document.getElementById("student_counter")
+         for(var keys in data_obj){
+            counter.append(" "+keys+" "+":"+" "+data_obj[keys]+" "+"|")
+
+         }
+         
+     }
+     calculate()
+    //  --------delete function---------
+    function dltFun(i){
+        console.log(i);
+       student_data= student_data.filter(function(element,index){
+                if(i==index){
+                    let trash= JSON.parse(localStorage.getItem("trash")) || [];
+                    trash.push(element)
+                    localStorage.setItem("trash",JSON.stringify(trash))
+                }
+           return index != i 
+         
+       })
+       
+       localStorage.setItem("students", JSON.stringify(student_data))
+      window.location.reload()
+    }
+  
+</script>
